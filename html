@@ -1,0 +1,45 @@
+// script.js
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sendButton = document.getElementById("send-button");
+    const userInput = document.getElementById("user-input");
+    const chatContent = document.getElementById("chat-content");
+
+    sendButton.addEventListener("click", () => handleUserMessage());
+    userInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") handleUserMessage();
+    });
+
+    function handleUserMessage() {
+        const message = userInput.value.trim();
+        if (message === "") return;
+
+        addMessage("user-message", message);
+        userInput.value = "";
+
+        const response = getBotResponse(message);
+        setTimeout(() => addMessage("bot-message", response), 500);
+    }
+
+    function addMessage(className, message) {
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("message", className);
+        messageDiv.innerText = message;
+        chatContent.appendChild(messageDiv);
+        chatContent.scrollTop = chatContent.scrollHeight;
+    }
+
+    function getBotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+
+        if (lowerMessage.includes("score")) {
+            return "Today's score is Team A 3 - 1 Team B.";
+        } else if (lowerMessage.includes("schedule")) {
+            return "The next game is on Saturday at 7 PM.";
+        } else if (lowerMessage.includes("news")) {
+            return "The latest sports news: Team A signs a new star player!";
+        } else {
+            return "I'm here to help with scores, schedules, and news. Try asking about one of those!";
+        }
+    }
+});
